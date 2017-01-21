@@ -17,6 +17,7 @@ public:
     void AdvanceCycle();
 
 private:
+    void FetchOpcode();
     void DecodeOpcode();
 
     static const int memorySize = 0x1000;
