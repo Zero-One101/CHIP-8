@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <direct.h>
+#include <Windows.h>
 
 Cpu cpu;
 
@@ -30,6 +31,7 @@ int main(int argc, char* argv[])
     while (true)
     {
         cpu.AdvanceCycle();
+        Sleep(100);
     }
 
     return 0;

@@ -19,11 +19,25 @@ public:
 private:
     void FetchOpcode();
     void DecodeOpcode();
+    bool ShouldDraw();
+
+    void JumpToAddress();
+    void JumpToSubroutine();
+    void SkipIfRegisterEqual();
+    void SetRegister();
+    void AddToRegister();
+    void AssignRegisterToRegister();
+    void SetIndex();
+    void Draw();
+    void SkipIfKeyUp();
+    void AddRegisterToIndex();
 
     static const int memorySize = 0x1000;
     static const int displaySize = 64 * 32;
     static const int stackSize = 16;
     static const int registerCount = 16;
+
+    bool shouldDraw = false;
 
     // The current opcode being read by the CPU
     unsigned short opcode;
