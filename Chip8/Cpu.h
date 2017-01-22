@@ -21,6 +21,7 @@ private:
     void DecodeOpcode();
     bool ShouldDraw();
 
+    void ReturnFromSubroutine();
     void JumpToAddress();
     void JumpToSubroutine();
     void SkipIfRegisterEqual();
@@ -30,7 +31,10 @@ private:
     void SetIndex();
     void Draw();
     void SkipIfKeyUp();
+    void StoreDelayTimer();
+    void SetDelay();
     void AddRegisterToIndex();
+    void FillRegisters();
 
     static const int memorySize = 0x1000;
     static const int displaySize = 64 * 32;

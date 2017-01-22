@@ -71,6 +71,12 @@ void Cpu::DecodeOpcode()
         {
             switch (opcode & 0x00FF)
             {
+                case 0x00EE:
+                {
+                    ReturnFromSubroutine();
+                }
+                break;
+
                 default:
                     printf("Unknown opcode [0x0000]: 0x%.4X\n", opcode);
                     break;
@@ -159,9 +165,27 @@ void Cpu::DecodeOpcode()
         {
             switch (opcode & 0x00FF)
             {
+                case 0x0007:
+                {
+                    StoreDelayTimer();
+                }
+                break;
+
+                case 0x0015:
+                {
+                    SetDelay();
+                }
+                break;
+
                 case 0x001E:
                 {
                     AddRegisterToIndex();
+                }
+                break;
+
+                case 0x0065:
+                {
+                    FillRegisters();
                 }
                 break;
 
@@ -176,6 +200,14 @@ void Cpu::DecodeOpcode()
             printf("Unknown opcode: 0x%.4X\n", opcode);
             break;
     }
+}
+
+void Cpu::ReturnFromSubroutine()
+{
+    sp--;
+    pc = stack[sp];
+    pc += 2;
+    printf("0x%.4X: Returned from subroutine to 0x%.4X\n", opcode, pc);
 }
 
 void Cpu::JumpToAddress()
@@ -278,9 +310,34 @@ void Cpu::SkipIfKeyUp()
     }
 }
 
+void Cpu::StoreDelayTimer()
+{
+    V[(opcode & 0x0F00) >> 8] = delayTimer;
+    pc += 2;
+    printf("0x%.4X: Stored delay timer value %i into register %i\n", opcode, delayTimer, (opcode & 0x0F00) >> 8);
+}
+
+void Cpu::SetDelay()
+{
+    delayTimer = (opcode & 0x0F00) >> 8;
+    printf("0x%.4X: Delay timer set to %i\n", opcode, delayTimer);
+    pc += 2;
+}
+
 void Cpu::AddRegisterToIndex()
 {
     I += V[(opcode & 0x0F00) >> 8];
     pc += 2;
     printf("0x%.4X: Added register %i to Index\n", opcode, (opcode & 0x0F00) >> 8);
+}
+
+void Cpu::FillRegisters()
+{
+    // Fills V0 to VX inclusive with values from memory starting at address I
+    for (int i = 0; i <= (opcode & 0x0F00) >> 8; i++)
+    {
+        V[i] = memory[I + i];
+    }
+    pc += 2;
+    printf("0x%.4X: Filled registers 0 to %i\n", opcode, (opcode & 0x0F00) >> 8);
 }

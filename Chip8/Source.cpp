@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
     while (true)
     {
         cpu.AdvanceCycle();
-        Sleep(100);
+        Sleep(10);
     }
 
     return 0;
