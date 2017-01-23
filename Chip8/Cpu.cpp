@@ -53,6 +53,21 @@ void Cpu::AdvanceCycle()
 {
     FetchOpcode();
     DecodeOpcode();
+
+    if (delayTimer > 0)
+    {
+        delayTimer--;
+    }
+
+    if (soundTimer > 0)
+    {
+        soundTimer--;
+
+        if (soundTimer == 1)
+        {
+            printf("BEEEEEEEEEEEEEEEEEEP");
+        }
+    }
 }
 
 void Cpu::FetchOpcode()
@@ -319,7 +334,7 @@ void Cpu::StoreDelayTimer()
 
 void Cpu::SetDelay()
 {
-    delayTimer = (opcode & 0x0F00) >> 8;
+    delayTimer = V[(opcode & 0x0F00) >> 8];
     printf("0x%.4X: Delay timer set to %i\n", opcode, delayTimer);
     pc += 2;
 }
